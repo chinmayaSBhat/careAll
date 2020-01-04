@@ -26,7 +26,7 @@ def get_olie_id_by_name(name):
 #get young id by name
 def get_young_id_by_name(name):
     query="SELECT ID FROM YOUNG WHERE NAME='"+name+"'"
-    print(query)
+    
     return(next(cur.execute(query)))
     
         
@@ -35,8 +35,8 @@ def make_request(yname,oname):
         yid=get_young_id_by_name(yname)
         oid=get_olie_id_by_name(oname)
         query="SELECT COUNT(YID) FROM CARE WHERE YID="+str(yid[0])
-        data=[oid,yid]
-        print(data)
+        data=[oid[0],yid[0]]
+        
         if(next(cur.execute(query))[0]<4):
             cur.execute("""INSERT INTO REQUEST_APPROVE(OID,YID,REQUEST) VALUES(?,?,0);""",data)
             conn.commit()
@@ -77,7 +77,7 @@ def ofeedback(yname,oname,feedback,ratings):
 #feedback by oldies to young
 def yfeedback(name,feedback,ratings):
     try:
-        query="SELECT ID FROM CARE WHERE OID="+get_olie_id_by_name(name)
+        query="SELECT ID FROM CARE WHERE OID="+get_olie_id_by_name(name)[0]
         yid=next(cur.execute(query))
         dat=[yid,oid,feedback,rating]
         cur.execute(""""INSERT INTO Y_FEEDBACK(YID,OID,FEEDBACK) VALUES(?,?,?,?);""",data)
